@@ -1,56 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import Iniciar from './Iniciar';
+import Informacion from './Informacion';
+import ElegirEdad from './ElegirEdad';
+
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  // Funciones para los botones
-  const handleStart = () => {
-    console.log("Iniciar lecciones");
-    // Aquí puedes agregar la navegación a la pantalla de lecciones
-  };
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Matemática Básica' }} />
+        <Stack.Screen name="Iniciar" component={Iniciar} />
+        <Stack.Screen name="Informacion" component={Informacion} />
+        <Stack.Screen name="ElegirEdad" component={ElegirEdad} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
-  const handleInfo = () => {
-    console.log("Ver información");
-    // Aquí puedes agregar la navegación a la pantalla de información
-  };
-
-  const handleSelectAge = () => {
-    console.log("Elegir edad");
-    // Aquí puedes agregar la lógica para seleccionar la edad
-  };
-
+function HomeScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
-      {/* Encabezado */}
       <Text style={styles.header}>Matemática Básica</Text>
 
-      {/* Imagen */}
-      <Image
-        source={require('./assets/splash-icono.png')}
-        style={styles.image}
-      />
+      <Image source={require('./assets/splash-icono.png')} style={styles.image} />
 
-      {/* Texto introductorio */}
       <Text style={styles.text}>
-        Bienvenido a la app para aprender matemática básica. Aquí podrás 
-        repasar operaciones, tablas y conceptos esenciales de forma sencilla y divertida.
+        Bienvenido a la app para aprender matemática básica. Aquí podrás repasar operaciones, tablas y conceptos esenciales.
       </Text>
 
-      {/* Botones */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleStart}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Iniciar')}>
           <Text style={styles.buttonText}>Iniciar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={handleInfo}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Informacion')}>
           <Text style={styles.buttonText}>Información</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={handleSelectAge}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ElegirEdad')}>
           <Text style={styles.buttonText}>Elegir Edad</Text>
         </TouchableOpacity>
       </View>
-
-      <StatusBar style="auto" />
     </View>
   );
 }
