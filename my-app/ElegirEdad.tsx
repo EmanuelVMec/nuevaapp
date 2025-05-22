@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-export default function ElegirEdad() {
+export default function ElegirEdad({ navigation, setEdadSeleccionada }: any) {
+
   const handleSelectAge = (ageRange: string) => {
-    console.log(`Seleccionaste: ${ageRange}`);
-    // Aquí puedes agregar lógica para definir el nivel de dificultad
+    setEdadSeleccionada(ageRange);
+    navigation.navigate('Home'); // O 'Iniciar' si quieres ir directo a iniciar
   };
 
   return (
@@ -26,7 +27,7 @@ export default function ElegirEdad() {
         <Text style={styles.buttonText}>13-15 años</Text>
       </TouchableOpacity>
     
-     <TouchableOpacity style={styles.button} onPress={() => handleSelectAge('16-18 años')}>
+      <TouchableOpacity style={styles.button} onPress={() => handleSelectAge('16-18 años')}>
         <Text style={styles.buttonText}>16-18 años</Text>
       </TouchableOpacity>
     </View>
