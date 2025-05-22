@@ -1,0 +1,67 @@
+// ejercicios.ts
+export const ejerciciosPorEdad = {
+  '4-6 años': [
+    { pregunta: '¿Cuánto es 2 + 3?', opciones: ['4', '5', '6'], respuestaCorrecta: '5' },
+    { pregunta: '¿Cuánto es 5 - 1?', opciones: ['4', '3', '5'], respuestaCorrecta: '4' },
+    { pregunta: '¿Cuál es el número mayor?', opciones: ['7', '3', '5'], respuestaCorrecta: '7' },
+    { pregunta: '¿Qué número sigue después del 4?', opciones: ['3', '5', '2'], respuestaCorrecta: '5' },
+    { pregunta: '¿Cuánto es 1 + 1?', opciones: ['2', '3', '1'], respuestaCorrecta: '2' },
+    { pregunta: '¿Cuánto es 0 + 5?', opciones: ['4', '5', '6'], respuestaCorrecta: '5' },
+    { pregunta: '¿Cuánto es 3 - 2?', opciones: ['2', '1', '0'], respuestaCorrecta: '1' },
+    { pregunta: '¿Qué número es menor?', opciones: ['2', '1', '3'], respuestaCorrecta: '1' },
+    { pregunta: '¿Cuántos lados tiene un triángulo?', opciones: ['3', '4', '5'], respuestaCorrecta: '3' },
+    { pregunta: '¿Qué número viene antes del 6?', opciones: ['7', '4', '5'], respuestaCorrecta: '5' },
+  ],
+
+  '7-9 años': [
+    { pregunta: '¿Cuánto es 6 x 2?', opciones: ['12', '8', '14'], respuestaCorrecta: '12' },
+    { pregunta: '¿Cuánto es 9 ÷ 3?', opciones: ['2', '3', '4'], respuestaCorrecta: '3' },
+    { pregunta: '¿Cuánto es 7 + 6?', opciones: ['13', '12', '14'], respuestaCorrecta: '13' },
+    { pregunta: '¿Cuánto es 10 - 4?', opciones: ['5', '6', '7'], respuestaCorrecta: '6' },
+    { pregunta: '¿Cuál es el doble de 5?', opciones: ['10', '15', '20'], respuestaCorrecta: '10' },
+    { pregunta: '¿Cuánto es 4 x 3?', opciones: ['7', '12', '10'], respuestaCorrecta: '12' },
+    { pregunta: '¿Cuánto es 20 ÷ 5?', opciones: ['5', '4', '3'], respuestaCorrecta: '4' },
+    { pregunta: '¿Cuánto es 11 - 7?', opciones: ['4', '3', '5'], respuestaCorrecta: '4' },
+    { pregunta: '¿Cuánto es 3 x 3?', opciones: ['6', '9', '12'], respuestaCorrecta: '9' },
+    { pregunta: '¿Cuánto es 8 ÷ 2?', opciones: ['3', '4', '5'], respuestaCorrecta: '4' },
+  ],
+
+  '10-12 años': [
+    { pregunta: '¿Cuál es el resultado de 15 + 27?', opciones: ['42', '37', '43'], respuestaCorrecta: '42' },
+    { pregunta: '¿Cuánto es 48 ÷ 6?', opciones: ['6', '8', '7'], respuestaCorrecta: '8' },
+    { pregunta: '¿Cuánto es 9 x 7?', opciones: ['63', '72', '56'], respuestaCorrecta: '63' },
+    { pregunta: '¿Cuánto es 64 ÷ 8?', opciones: ['8', '7', '6'], respuestaCorrecta: '8' },
+    { pregunta: '¿Qué número falta: 5, 10, __, 20?', opciones: ['12', '15', '18'], respuestaCorrecta: '15' },
+    { pregunta: '¿Cuánto es 100 - 45?', opciones: ['55', '65', '60'], respuestaCorrecta: '55' },
+    { pregunta: '¿Cuánto es 36 ÷ 4?', opciones: ['8', '9', '6'], respuestaCorrecta: '9' },
+    { pregunta: '¿Cuánto es 11 x 3?', opciones: ['33', '30', '36'], respuestaCorrecta: '33' },
+    { pregunta: '¿Cuánto es 72 ÷ 9?', opciones: ['8', '6', '9'], respuestaCorrecta: '8' },
+    { pregunta: '¿Cuánto es 25 + 17?', opciones: ['42', '43', '41'], respuestaCorrecta: '42' },
+  ],
+
+  '13-15 años': [
+    { pregunta: '¿Cuánto es (5²) + (3²)?', opciones: ['34', '25', '29'], respuestaCorrecta: '34' },
+    { pregunta: '¿Cuál es la raíz cuadrada de 81?', opciones: ['7', '9', '8'], respuestaCorrecta: '9' },
+    { pregunta: '¿Cuánto es 2³?', opciones: ['6', '8', '9'], respuestaCorrecta: '8' },
+    { pregunta: '¿Cuál es el valor de x si 3x = 15?', opciones: ['4', '5', '6'], respuestaCorrecta: '5' },
+    { pregunta: '¿Cuánto es 7²?', opciones: ['49', '42', '56'], respuestaCorrecta: '49' },
+    { pregunta: '¿Cuánto es 100 ÷ 4?', opciones: ['20', '25', '30'], respuestaCorrecta: '25' },
+    { pregunta: '¿Cuánto es (6 x 6) + 4?', opciones: ['36', '40', '42'], respuestaCorrecta: '40' },
+    { pregunta: '¿Cuánto es 3⁴?', opciones: ['81', '64', '27'], respuestaCorrecta: '81' },
+    { pregunta: '¿Cuál es el mínimo común múltiplo de 3 y 4?', opciones: ['12', '6', '9'], respuestaCorrecta: '12' },
+    { pregunta: '¿Cuánto es (8²) - (4²)?', opciones: ['32', '48', '40'], respuestaCorrecta: '48' },
+  ],
+
+  '16-18 años': [
+    { pregunta: '¿Cuál es la derivada de f(x) = x²?', opciones: ['2x', 'x', 'x³'], respuestaCorrecta: '2x' },
+    { pregunta: '¿Cuál es la integral de f(x) = 2x?', opciones: ['x² + C', '2x + C', 'x + C'], respuestaCorrecta: 'x² + C' },
+    { pregunta: '¿Cuál es el límite de (1/x) cuando x→∞?', opciones: ['1', '0', '∞'], respuestaCorrecta: '0' },
+    { pregunta: '¿Cuál es la derivada de f(x) = sin(x)?', opciones: ['cos(x)', '-cos(x)', '-sin(x)'], respuestaCorrecta: 'cos(x)' },
+    { pregunta: '¿Cuánto es ln(e)?', opciones: ['1', '0', 'e'], respuestaCorrecta: '1' },
+    { pregunta: '¿Cuál es la derivada de f(x) = e^x?', opciones: ['e^x', 'x * e^x', 'ln(x)'], respuestaCorrecta: 'e^x' },
+    { pregunta: '¿Cuál es la solución de x² - 4 = 0?', opciones: ['2 y -2', '2', '4'], respuestaCorrecta: '2 y -2' },
+    { pregunta: '¿Qué es una función inyectiva?', opciones: ['Cada valor de y tiene un único x', 'Es simétrica', 'Tiene raíz cuadrada'], respuestaCorrecta: 'Cada valor de y tiene un único x' },
+    { pregunta: '¿Qué tipo de función es f(x) = x³?', opciones: ['Cúbica', 'Cuadrática', 'Lineal'], respuestaCorrecta: 'Cúbica' },
+    { pregunta: '¿Cuál es la integral de f(x) = x?', opciones: ['(x²)/2 + C', 'x + C', 'x² + C'], respuestaCorrecta: '(x²)/2 + C' },
+  ],
+};

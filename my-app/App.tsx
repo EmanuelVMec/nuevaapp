@@ -44,7 +44,7 @@ export default function App() {
 function HomeScreen({ navigation, edadSeleccionada, setEdadSeleccionada }: any) {
   const handleIniciar = () => {
     if (!edadSeleccionada) {
-      Alert.alert("Selecciona una edad", "Debes elegir una edad antes de comenzar.");
+      Alert.alert("Selecciona una edad", "Debes elegir una edad antes de comenzar Gracias :) ");
     } else {
       navigation.navigate('Iniciar');
     }
