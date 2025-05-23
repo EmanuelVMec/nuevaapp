@@ -12,6 +12,7 @@ export default function Iniciar({ route }: any) {
   const [soundCorrecto, setSoundCorrecto] = useState<Audio.Sound | null>(null);
   const [soundIncorrecto, setSoundIncorrecto] = useState<Audio.Sound | null>(null);
 
+// Cargar sonidos al montar componente
   useEffect(() => {
     const loadSounds = async () => {
       const { sound: soundC } = await Audio.Sound.createAsync(require('./assets/sounds/correcto.mp3'));
@@ -19,12 +20,20 @@ export default function Iniciar({ route }: any) {
       setSoundCorrecto(soundC);
       setSoundIncorrecto(soundI);
     };
+
     loadSounds();
+
+    // Descargar sonidos al desmontar componente
     return () => {
-      if (soundCorrecto) soundCorrecto.unloadAsync();
-      if (soundIncorrecto) soundIncorrecto.unloadAsync();
+      if (soundCorrecto) {
+        soundCorrecto.unloadAsync();
+      }
+      if (soundIncorrecto) {
+        soundIncorrecto.unloadAsync();
+      }
     };
   }, []);
+
 
   if (!edadSeleccionada || !dificultadSeleccionada) {
     return (
