@@ -1,41 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ejercicio from './Ejercicio';
 import { ejerciciosPorEdad } from './ejercicios';
+import { Audio } from 'expo-av';
 
-interface Props {
-  edadSeleccionada: string | null;
-  dificultadSeleccionada: string | null; // Nuevo prop para dificultad
-}
+export default function Iniciar({ route }: any) {
+  const { edadSeleccionada, dificultadSeleccionada } = route.params;
 
-export default function Iniciar({ edadSeleccionada, dificultadSeleccionada }: Props) {
   const [indiceEjercicio, setIndiceEjercicio] = useState(0);
   const [puntuacion, setPuntuacion] = useState(0);
+  const [soundCorrecto, setSoundCorrecto] = useState<Audio.Sound | null>(null);
+  const [soundIncorrecto, setSoundIncorrecto] = useState<Audio.Sound | null>(null);
 
-  if (!edadSeleccionada) {
+  useEffect(() => {
+    const loadSounds = async () => {
+      const { sound: soundC } = await Audio.Sound.createAsync(require('./assets/sounds/correcto.mp3'));
+      const { sound: soundI } = await Audio.Sound.createAsync(require('./assets/sounds/incorrecto.mp3'));
+      setSoundCorrecto(soundC);
+      setSoundIncorrecto(soundI);
+    };
+    loadSounds();
+    return () => {
+      if (soundCorrecto) soundCorrecto.unloadAsync();
+      if (soundIncorrecto) soundIncorrecto.unloadAsync();
+    };
+  }, []);
+
+  if (!edadSeleccionada || !dificultadSeleccionada) {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Por favor, selecciona una edad antes de comenzar.</Text>
+        <Text style={styles.text}>Por favor, selecciona una edad y dificultad antes de comenzar.</Text>
       </View>
     );
   }
 
-  if (!dificultadSeleccionada) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Por favor, selecciona una dificultad antes de comenzar.</Text>
-      </View>
-    );
-  }
-
-  // Filtrar ejercicios por edad y dificultad
+  // Filtrar ejercicios según edad y dificultad
   const ejercicios = (ejerciciosPorEdad[edadSeleccionada] || []).filter(
     (ejercicio) => ejercicio.dificultad === dificultadSeleccionada
   );
 
-  const handleRespuesta = (correcta: boolean) => {
+  const handleRespuesta = async (correcta: boolean) => {
     if (correcta) {
       setPuntuacion(puntuacion + 1);
+      if (soundCorrecto) await soundCorrecto.replayAsync();
+    } else {
+      if (soundIncorrecto) await soundIncorrecto.replayAsync();
     }
   };
 
@@ -64,21 +73,19 @@ export default function Iniciar({ edadSeleccionada, dificultadSeleccionada }: Pr
           <Text style={styles.preguntaNumero}>
             Pregunta {indiceEjercicio + 1} de {ejercicios.length}
           </Text>
-
           <View style={styles.contenido}>
             <Ejercicio
               key={indiceEjercicio}
               ejercicio={ejercicios[indiceEjercicio]}
               onRespuesta={handleRespuesta}
             />
-
             <TouchableOpacity style={styles.botonSiguiente} onPress={siguienteEjercicio}>
               <Text style={styles.botonTexto}>Siguiente</Text>
             </TouchableOpacity>
           </View>
         </View>
       ) : (
-        <Text style={styles.text}>No hay ejercicios para esta combinación de edad y dificultad.</Text>
+        <Text style={styles.text}>No hay ejercicios para esta edad y dificultad.</Text>
       )}
     </View>
   );
