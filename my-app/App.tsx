@@ -6,6 +6,7 @@ import { useState } from 'react';
 import Iniciar from './Iniciar';
 import Informacion from './Informacion';
 import ElegirEdad from './ElegirEdad';
+import ElegirDificultad from './ElegirDificultad'; // Nueva pantalla
 
 const Stack = createNativeStackNavigator();
 
@@ -24,10 +25,21 @@ export default function App() {
             />
           )}
         </Stack.Screen>
+
+        <Stack.Screen name="ElegirDificultad" component={ElegirDificultad} />
+
         <Stack.Screen name="Iniciar">
-          {(props) => <Iniciar {...props} edadSeleccionada={edadSeleccionada} />}
+          {(props) => (
+            <Iniciar
+              {...props}
+              edadSeleccionada={props.route.params?.edadSeleccionada}
+              dificultadSeleccionada={props.route.params?.dificultadSeleccionada}
+            />
+          )}
         </Stack.Screen>
+
         <Stack.Screen name="Informacion" component={Informacion} />
+
         <Stack.Screen name="ElegirEdad">
           {(props) => (
             <ElegirEdad
@@ -44,9 +56,10 @@ export default function App() {
 function HomeScreen({ navigation, edadSeleccionada, setEdadSeleccionada }: any) {
   const handleIniciar = () => {
     if (!edadSeleccionada) {
-      Alert.alert("Selecciona una edad", "Debes elegir una edad antes de comenzar Gracias :) ");
+      Alert.alert("Selecciona una edad", "Debes elegir una edad antes de comenzar. ¡Gracias! 🙂");
     } else {
-      navigation.navigate('Iniciar');
+      // Ahora va a ElegirDificultad
+      navigation.navigate('ElegirDificultad', { edadSeleccionada });
     }
   };
 
@@ -77,23 +90,20 @@ function HomeScreen({ navigation, edadSeleccionada, setEdadSeleccionada }: any) 
         </TouchableOpacity>
 
         {edadSeleccionada && (
-           <View style={styles.ageContainer}>
-             <Text style={styles.selectedAge}>Edad seleccionada: {edadSeleccionada}</Text>
-    
-             <TouchableOpacity
-             style={styles.removeButton}
+          <View style={styles.ageContainer}>
+            <Text style={styles.selectedAge}>Edad seleccionada: {edadSeleccionada}</Text>
+            <TouchableOpacity
+              style={styles.removeButton}
               onPress={() => setEdadSeleccionada(null)}
-              >
-            <Text style={styles.removeButtonText}>Quitar edad</Text>
-              </TouchableOpacity>
-           </View>
-    )}
-
+            >
+              <Text style={styles.removeButtonText}>Quitar edad</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -141,30 +151,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonDisabled: {
-  backgroundColor: '#ccc',
-},
-
-selectedAge: {
-  marginTop: 10,
-  color: '#2c3e50',
-  fontSize: 14,
-},
-ageContainer: {
-  marginTop: 15,
-  alignItems: 'center',
-},
-
-removeButton: {
-  marginTop: 8,
-  backgroundColor: '#e74c3c',
-  paddingHorizontal: 20,
-  paddingVertical: 8,
-  borderRadius: 10,
-},
-
-removeButtonText: {
-  color: '#fff',
-  fontWeight: 'bold',
-},
-
+    backgroundColor: '#ccc',
+  },
+  selectedAge: {
+    marginTop: 10,
+    color: '#2c3e50',
+    fontSize: 14,
+  },
+  ageContainer: {
+    marginTop: 15,
+    alignItems: 'center',
+  },
+  removeButton: {
+    marginTop: 8,
+    backgroundColor: '#e74c3c',
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 10,
+  },
+  removeButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });

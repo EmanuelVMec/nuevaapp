@@ -3,7 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ejercicio from './Ejercicio';
 import { ejerciciosPorEdad } from './ejercicios';
 
-export default function Iniciar({ edadSeleccionada }: { edadSeleccionada: string | null }) {
+interface Props {
+  edadSeleccionada: string | null;
+  dificultadSeleccionada: string | null; // Nuevo prop para dificultad
+}
+
+export default function Iniciar({ edadSeleccionada, dificultadSeleccionada }: Props) {
   const [indiceEjercicio, setIndiceEjercicio] = useState(0);
   const [puntuacion, setPuntuacion] = useState(0);
 
@@ -15,7 +20,18 @@ export default function Iniciar({ edadSeleccionada }: { edadSeleccionada: string
     );
   }
 
-  const ejercicios = ejerciciosPorEdad[edadSeleccionada] || [];
+  if (!dificultadSeleccionada) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>Por favor, selecciona una dificultad antes de comenzar.</Text>
+      </View>
+    );
+  }
+
+  // Filtrar ejercicios por edad y dificultad
+  const ejercicios = (ejerciciosPorEdad[edadSeleccionada] || []).filter(
+    (ejercicio) => ejercicio.dificultad === dificultadSeleccionada
+  );
 
   const handleRespuesta = (correcta: boolean) => {
     if (correcta) {
@@ -36,7 +52,12 @@ export default function Iniciar({ edadSeleccionada }: { edadSeleccionada: string
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Matemática Básica</Text>
-      <Text style={styles.edad}>Edad seleccionada: <Text style={styles.edadValor}>{edadSeleccionada}</Text></Text>
+      <Text style={styles.edad}>
+        Edad seleccionada: <Text style={styles.edadValor}>{edadSeleccionada}</Text>
+      </Text>
+      <Text style={styles.edad}>
+        Dificultad seleccionada: <Text style={styles.edadValor}>{dificultadSeleccionada}</Text>
+      </Text>
 
       {ejercicios.length > 0 ? (
         <View style={styles.card}>
@@ -57,7 +78,7 @@ export default function Iniciar({ edadSeleccionada }: { edadSeleccionada: string
           </View>
         </View>
       ) : (
-        <Text style={styles.text}>No hay ejercicios para esta edad.</Text>
+        <Text style={styles.text}>No hay ejercicios para esta combinación de edad y dificultad.</Text>
       )}
     </View>
   );
@@ -80,7 +101,7 @@ const styles = StyleSheet.create({
   edad: {
     fontSize: 16,
     color: '#2c3e50',
-    marginBottom: 20,
+    marginBottom: 5,
   },
   edadValor: {
     fontWeight: 'bold',
