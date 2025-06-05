@@ -9,10 +9,11 @@ export default function Iniciar({ route }: any) {
 
   const [indiceEjercicio, setIndiceEjercicio] = useState(0);
   const [puntuacion, setPuntuacion] = useState(0);
+  const [respuestaActualCorrecta, setRespuestaActualCorrecta] = useState<boolean | null>(null);
+  const [respondido, setRespondido] = useState(false);
   const [soundCorrecto, setSoundCorrecto] = useState<Audio.Sound | null>(null);
   const [soundIncorrecto, setSoundIncorrecto] = useState<Audio.Sound | null>(null);
 
-// Cargar sonidos al montar componente
   useEffect(() => {
     const loadSounds = async () => {
       const { sound: soundC } = await Audio.Sound.createAsync(require('./assets/sounds/correcto.mp3'));
@@ -23,17 +24,11 @@ export default function Iniciar({ route }: any) {
 
     loadSounds();
 
-    // Descargar sonidos al desmontar componente
     return () => {
-      if (soundCorrecto) {
-        soundCorrecto.unloadAsync();
-      }
-      if (soundIncorrecto) {
-        soundIncorrecto.unloadAsync();
-      }
+      soundCorrecto?.unloadAsync();
+      soundIncorrecto?.unloadAsync();
     };
   }, []);
-
 
   if (!edadSeleccionada || !dificultadSeleccionada) {
     return (
@@ -43,27 +38,38 @@ export default function Iniciar({ route }: any) {
     );
   }
 
-  // Filtrar ejercicios según edad y dificultad
   const ejercicios = (ejerciciosPorEdad[edadSeleccionada] || []).filter(
     (ejercicio) => ejercicio.dificultad === dificultadSeleccionada
   );
 
   const handleRespuesta = async (correcta: boolean) => {
+    setRespondido(true);
+    setRespuestaActualCorrecta(correcta);
+
     if (correcta) {
-      setPuntuacion(puntuacion + 1);
-      if (soundCorrecto) await soundCorrecto.replayAsync();
+      setPuntuacion(p => p + 1);
+      await soundCorrecto?.replayAsync();
     } else {
-      if (soundIncorrecto) await soundIncorrecto.replayAsync();
+      await soundIncorrecto?.replayAsync();
     }
   };
 
   const siguienteEjercicio = () => {
+    if (!respondido) {
+      alert('Por favor, selecciona una respuesta antes de continuar.');
+      return;
+    }
+
     if (indiceEjercicio + 1 < ejercicios.length) {
       setIndiceEjercicio(indiceEjercicio + 1);
+      setRespondido(false);
+      setRespuestaActualCorrecta(null);
     } else {
       alert(`¡Terminaste! Puntaje: ${puntuacion} de ${ejercicios.length}`);
       setIndiceEjercicio(0);
       setPuntuacion(0);
+      setRespondido(false);
+      setRespuestaActualCorrecta(null);
     }
   };
 
@@ -88,7 +94,10 @@ export default function Iniciar({ route }: any) {
               ejercicio={ejercicios[indiceEjercicio]}
               onRespuesta={handleRespuesta}
             />
-            <TouchableOpacity style={styles.botonSiguiente} onPress={siguienteEjercicio}>
+            <TouchableOpacity
+              style={[styles.botonSiguiente, !respondido && { backgroundColor: '#ccc' }]}
+              onPress={siguienteEjercicio}
+            >
               <Text style={styles.botonTexto}>Siguiente</Text>
             </TouchableOpacity>
           </View>
