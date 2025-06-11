@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, Platform, BackHandler } from 'react-native';
 import { useState } from 'react';
 
 import Iniciar from './Iniciar';
@@ -63,6 +63,14 @@ function HomeScreen({ navigation, edadSeleccionada, setEdadSeleccionada }: any) 
     }
   };
 
+  const handleSalir = () => {
+    if (Platform.OS === 'android') {
+      BackHandler.exitApp(); // Cierra la aplicación en Android
+    } else {
+      navigation.navigate('Home'); // Redirige al Home en iOS
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Matemática Básica</Text>
@@ -100,6 +108,14 @@ function HomeScreen({ navigation, edadSeleccionada, setEdadSeleccionada }: any) 
             </TouchableOpacity>
           </View>
         )}
+
+        {/* Nuevo botón para salir */}
+        <TouchableOpacity
+          style={[styles.button, styles.buttonExit]}
+          onPress={handleSalir}
+        >
+          <Text style={styles.buttonText}>Salir</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -152,6 +168,9 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     backgroundColor: '#ccc',
+  },
+  buttonExit: {
+    backgroundColor: '#e74c3c', // Rojo
   },
   selectedAge: {
     marginTop: 10,

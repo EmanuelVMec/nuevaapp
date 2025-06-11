@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Platform, BackHandler } from 'react-native';
 import Ejercicio from './Ejercicio';
 import { ejerciciosPorEdad } from './ejercicios';
 import { Audio } from 'expo-av';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Iniciar({ route }: any) {
   const { edadSeleccionada, dificultadSeleccionada } = route.params;
+  const navigation = useNavigation();
 
   const [indiceEjercicio, setIndiceEjercicio] = useState(0);
   const [puntuacion, setPuntuacion] = useState(0);
@@ -13,6 +15,7 @@ export default function Iniciar({ route }: any) {
   const [respondido, setRespondido] = useState(false);
   const [soundCorrecto, setSoundCorrecto] = useState<Audio.Sound | null>(null);
   const [soundIncorrecto, setSoundIncorrecto] = useState<Audio.Sound | null>(null);
+  const [modalVisible, setModalVisible] = useState(false); // Estado para el modal de resultados
 
   useEffect(() => {
     const loadSounds = async () => {
@@ -65,11 +68,27 @@ export default function Iniciar({ route }: any) {
       setRespondido(false);
       setRespuestaActualCorrecta(null);
     } else {
-      alert(`¡Terminaste! Puntaje: ${puntuacion} de ${ejercicios.length}`);
-      setIndiceEjercicio(0);
-      setPuntuacion(0);
-      setRespondido(false);
-      setRespuestaActualCorrecta(null);
+      setModalVisible(true); // Mostrar el modal cuando se termine los ejercicios
+    }
+  };
+
+  const intentarDeNuevo = () => {
+    setIndiceEjercicio(0);
+    setPuntuacion(0);
+    setRespondido(false);
+    setRespuestaActualCorrecta(null);
+    setModalVisible(false); // Cerrar el modal
+  };
+
+  const iniciar = () => {
+    navigation.navigate('Home'); // Cambiar a la pantalla de inicio de la app
+  };
+
+  const salir = () => {
+    if (Platform.OS === 'android') {
+      BackHandler.exitApp(); // Cierra la aplicación en Android
+    } else {
+      navigation.navigate('Home'); // Redirige al Home en iOS
     }
   };
 
@@ -105,6 +124,34 @@ export default function Iniciar({ route }: any) {
       ) : (
         <Text style={styles.text}>No hay ejercicios para esta edad y dificultad.</Text>
       )}
+
+      {/* Modal de resultados */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {puntuacion < 7 ? (
+              <Text style={styles.modalHeader}>Puedes intentarlo de nuevo.</Text>
+            ) : (
+              <Text style={styles.modalHeader}>¡Felicidades!.</Text>
+            )}
+            <Text style={styles.modalText}>Tu puntaje: {puntuacion} de {ejercicios.length}</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={intentarDeNuevo}>
+              <Text style={styles.modalButtonText}>Intentar de Nuevo</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={iniciar}>
+              <Text style={styles.modalButtonText}>Ir al Inicio</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={salir}>
+              <Text style={styles.modalButtonText}>Salir</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -171,5 +218,42 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     textAlign: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: 300,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginBottom: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    color: '#7f8c8d',
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#3498db',
+    paddingVertical: 12,
+    borderRadius: 10,
+    width: '80%',
+    marginVertical: 5,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
