@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Linking } from 'react-native';
 import { FontAwesome, Feather, Entypo } from '@expo/vector-icons';
 
 export default function Informacion() {
@@ -12,11 +12,19 @@ export default function Informacion() {
         </Text>
       </View>
 
+      <Image 
+        source={require('./assets/splash-icono.png')} 
+        style={styles.bannerImage}
+        resizeMode="contain"
+        />
       <View style={styles.socials}>
-        <Text style={styles.socialsTitle}>Síguenos en nuestras redes:</Text>
+        <Text style={styles.socialsTitle}>Aprende matemáticas con estos recursos recomendados:</Text>
 
         <View style={styles.socialIcons}>
-          <TouchableOpacity style={styles.icon}>
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={() => Linking.openURL('https://www.tiktok.com/@aprendamosmatemat')}
+          >
             <Image 
               source={require('./assets/tik-tok.png')} 
               style={styles.customIcon} 
@@ -25,24 +33,32 @@ export default function Informacion() {
             <Text style={styles.iconText}>TikTok</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.icon}>
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={() => Linking.openURL('https://web.facebook.com/julioprofenet/?_rdc=1&_rdr#')}
+          >
             <FontAwesome name="facebook-square" size={24} color="#3b5998" />
             <Text style={styles.iconText}>Facebook</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.icon}>
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={() => Linking.openURL('https://www.youtube.com/@julioprofe')}
+          >
             <Feather name="youtube" size={24} color="#FF0000" />
             <Text style={styles.iconText}>YouTube</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.icon}>
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={() => Linking.openURL('https://www.instagram.com/matematicasperfectas/?hl=es-la')}
+          >
             <Entypo name="instagram" size={24} color="#C13584" />
             <Text style={styles.iconText}>Instagram</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Sección de Derechos de Autor */}
       <View style={styles.footer}>
         <Text style={styles.copyright}>
           © 2025 Matematica Básica App. Todos los derechos reservados.
@@ -96,7 +112,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
-    marginBottom: -290,
+    marginTop: 30,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -108,7 +124,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#3498db',
     marginBottom: 10,
+    textAlign: 'center',
   },
+
   socialIcons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -152,4 +170,10 @@ const styles = StyleSheet.create({
     color: '#777',
     textAlign: 'center',
   },
+  bannerImage: {
+  width: '90%',
+  height: 150,
+  marginBottom: 20,
+  borderRadius: 12,
+},
 });
