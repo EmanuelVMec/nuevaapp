@@ -2,11 +2,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, Platform, BackHandler } from 'react-native';
 import { useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import Iniciar from './Iniciar';
 import Informacion from './Informacion';
 import ElegirEdad from './ElegirEdad';
-import ElegirDificultad from './ElegirDificultad'; // Nueva pantalla
+import ElegirDificultad from './ElegirDificultad';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +17,19 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator 
+        initialRouteName="Home"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#4F6D7A',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: '600',
+          },
+          headerBackTitleVisible: false,
+        }}
+      >
         <Stack.Screen name="Home">
           {(props) => (
             <HomeScreen
@@ -28,7 +42,10 @@ export default function App() {
 
         <Stack.Screen name="ElegirDificultad" component={ElegirDificultad} />
 
-        <Stack.Screen name="Iniciar">
+        <Stack.Screen 
+          name="Iniciar" 
+          options={{ title: 'Modo de Juego' }}
+        >
           {(props) => (
             <Iniciar
               {...props}
@@ -38,9 +55,16 @@ export default function App() {
           )}
         </Stack.Screen>
 
-        <Stack.Screen name="Informacion" component={Informacion} />
+        <Stack.Screen 
+          name="Informacion" 
+          component={Informacion} 
+          options={{ title: 'Información' }}
+        />
 
-        <Stack.Screen name="ElegirEdad">
+        <Stack.Screen 
+          name="ElegirEdad" 
+          options={{ title: 'Seleccionar Edad' }}
+        >
           {(props) => (
             <ElegirEdad
               {...props}
@@ -56,140 +80,226 @@ export default function App() {
 function HomeScreen({ navigation, edadSeleccionada, setEdadSeleccionada }: any) {
   const handleIniciar = () => {
     if (!edadSeleccionada) {
-      Alert.alert("Selecciona una edad", "Debes elegir una edad antes de comenzar. ¡Gracias! 🙂");
+      Alert.alert(
+        "Edad requerida",
+        "Por favor selecciona una edad antes de comenzar para adaptar los ejercicios a tu nivel.",
+        [{ text: "Entendido", style: 'default' }]
+      );
     } else {
-      // Ahora va a ElegirDificultad
       navigation.navigate('ElegirDificultad', { edadSeleccionada });
     }
   };
 
   const handleSalir = () => {
-    if (Platform.OS === 'android') {
-      BackHandler.exitApp(); // Cierra la aplicación en Android
-    } else {
-      navigation.navigate('Home'); // Redirige al Home en iOS
-    }
+    Alert.alert(
+      "Salir",
+      "¿Estás seguro que deseas salir de la aplicación?",
+      [
+        { text: "Cancelar", style: 'cancel' },
+        { text: "Salir", onPress: () => Platform.OS === 'android' ? BackHandler.exitApp() : null }
+      ]
+    );
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Matemática Básica</Text>
+    <LinearGradient 
+      colors={['#E8F1F2', '#BDD5EA', '#577399']} 
+      style={styles.container}
+    >
+      <View style={styles.content}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Math Genius</Text>
+          <Text style={styles.subheader}>Aprende matemáticas de forma divertida</Text>
+        </View>
 
-      <Image source={require('./assets/splash-icono.png')} style={styles.image} />
+        <Image 
+          source={require('./assets/splash-icono.png')} 
+          style={styles.image} 
+        />
 
-      <Text style={styles.text}>
-        Bienvenido a la app para aprender matemática básica. Aquí podrás repasar operaciones, tablas y conceptos esenciales.
-      </Text>
+        <Text style={styles.text}>
+          Domina las matemáticas básicas con ejercicios adaptados a tu edad y nivel de dificultad.
+        </Text>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.button, !edadSeleccionada && styles.buttonDisabled]}
-          onPress={handleIniciar}
-        >
-          <Text style={styles.buttonText}>Iniciar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Informacion')}>
-          <Text style={styles.buttonText}>Información</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ElegirEdad')}>
-          <Text style={styles.buttonText}>Elegir Edad</Text>
-        </TouchableOpacity>
-
-        {edadSeleccionada && (
-          <View style={styles.ageContainer}>
-            <Text style={styles.selectedAge}>Edad seleccionada: {edadSeleccionada}</Text>
-            <TouchableOpacity
-              style={styles.removeButton}
-              onPress={() => setEdadSeleccionada(null)}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, !edadSeleccionada && styles.buttonDisabled]}
+            onPress={handleIniciar}
+            activeOpacity={0.7}
+          >
+            <LinearGradient
+              colors={!edadSeleccionada ? ['#cccccc', '#aaaaaa'] : ['#4CAF50', '#2E7D32']}
+              style={styles.buttonGradient}
             >
-              <Text style={styles.removeButtonText}>Quitar edad</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+              <MaterialIcons name="play-arrow" size={24} color="white" />
+              <Text style={styles.buttonText}>Comenzar</Text>
+            </LinearGradient>
+          </TouchableOpacity>
 
-        {/* Nuevo botón para salir */}
+          <TouchableOpacity 
+            style={styles.button} 
+            onPress={() => navigation.navigate('ElegirEdad')}
+            activeOpacity={0.7}
+          >
+            <LinearGradient
+              colors={['#2196F3', '#1976D2']}
+              style={styles.buttonGradient}
+            >
+              <MaterialIcons name="person" size={24} color="white" />
+              <Text style={styles.buttonText}>Seleccionar Edad</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.button} 
+            onPress={() => navigation.navigate('Informacion')}
+            activeOpacity={0.7}
+          >
+            <LinearGradient
+              colors={['#9C27B0', '#7B1FA2']}
+              style={styles.buttonGradient}
+            >
+              <MaterialIcons name="info" size={24} color="white" />
+              <Text style={styles.buttonText}>Información</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {edadSeleccionada && (
+            <View style={styles.ageContainer}>
+              <View style={styles.ageBadge}>
+                <Text style={styles.selectedAge}>Edad: {edadSeleccionada}</Text>
+                <TouchableOpacity
+                  style={styles.removeButton}
+                  onPress={() => setEdadSeleccionada(null)}
+                >
+                  <MaterialIcons name="close" size={18} color="#fff" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </View>
+
         <TouchableOpacity
-          style={[styles.button, styles.buttonExit]}
+          style={styles.exitButton}
           onPress={handleSalir}
+          activeOpacity={0.7}
         >
-          <Text style={styles.buttonText}>Salir</Text>
+          <Text style={styles.exitButtonText}>Salir de la aplicación</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
+  },
+  content: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 25,
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+  headerContainer: {
+    alignItems: 'center',
     marginBottom: 30,
   },
+  header: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#2E4057',
+    marginBottom: 5,
+    fontFamily: 'sans-serif-condensed',
+  },
+  subheader: {
+    fontSize: 16,
+    color: '#4F6D7A',
+    fontWeight: '500',
+  },
   image: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
+    width: 180,
+    height: 180,
+    marginBottom: 25,
     resizeMode: 'contain',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   text: {
     fontSize: 16,
-    color: '#555',
+    color: '#2E4057',
     textAlign: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 30,
+    paddingHorizontal: 25,
+    marginBottom: 35,
+    lineHeight: 24,
   },
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: '#3498db',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
+    width: '100%',
+    borderRadius: 12,
     marginBottom: 15,
-    width: '80%',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  buttonGradient: {
+    paddingVertical: 15,
+    borderRadius: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '600',
+    marginLeft: 10,
   },
   buttonDisabled: {
-    backgroundColor: '#ccc',
-  },
-  buttonExit: {
-    backgroundColor: '#e74c3c', // Rojo
-  },
-  selectedAge: {
-    marginTop: 10,
-    color: '#2c3e50',
-    fontSize: 14,
+    opacity: 0.7,
   },
   ageContainer: {
-    marginTop: 15,
+    marginTop: 10,
     alignItems: 'center',
   },
-  removeButton: {
-    marginTop: 8,
-    backgroundColor: '#e74c3c',
-    paddingHorizontal: 20,
+  ageBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#4F6D7A',
     paddingVertical: 8,
-    borderRadius: 10,
+    paddingHorizontal: 15,
+    borderRadius: 20,
   },
-  removeButtonText: {
+  selectedAge: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  removeButton: {
+    marginLeft: 8,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  exitButton: {
+    marginTop: 20,
+    paddingVertical: 10,
+  },
+  exitButtonText: {
+    color: '#4F6D7A',
+    fontSize: 14,
+    fontWeight: '500',
+    textDecorationLine: 'underline',
   },
 });
